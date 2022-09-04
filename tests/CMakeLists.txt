@@ -4,22 +4,27 @@ project(${CMAKE_PROJECT_NAME}Tests VERSION 1.0.0 LANGUAGES CXX)
 
 
 # Add test sources files
-file(GLOB TEST_SOURCES "src/*.cpp")
+file(GLOB TEST_SOURCES "*.cpp")
 # Load GTest
 find_package(GTest REQUIRED)
 
 foreach(file ${TEST_SOURCES})
     # Define each unitest executable
-    string(REGEX REPLACE "(.*/)([a-zA-Z0-9_ ]+)(\.cpp)" test_name ${file}) 
+    string(REGEX REPLACE "(.*/)([a-zA-Z0-9_ ]+)(\.cpp)" "\\2" test_name ${file}) 
     add_executable(${test_name}_Tests ${file})
+
+    set_target_properties(${test_name}_Tests PROPERTIES
+        CXX_STANDARD 17
+        CXX_STANDARD_REQUIRED YES
+    )
+
     # Add include
     include(GoogleTest)
     # include(GoogleTest)
     # Add linking library
     target_link_libraries(
         ${test_name}_Tests
-        GTest::gest_main
-        pthread
+        GTest::gtest_main
         ${TORCH_LIBRARIES}
     )
 
