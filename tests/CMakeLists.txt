@@ -26,6 +26,7 @@ foreach(file ${TEST_SOURCES})
         ${test_name}_Tests
         GTest::gtest_main
         ${TORCH_LIBRARIES}
+        ${PRO_LIB_NAME}
     )
 
     get_target_property(OUT ${test_name}_Tests LINK_LIBRARIES)
