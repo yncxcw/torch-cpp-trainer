@@ -29,8 +29,8 @@ class DummyDataset : public torch::data::datasets::Dataset<DummyDataset> {
     torch::optional<size_t> size() const override { return length; }
 
     torch::data::Example<> get(size_t index) override {
-        return torch::data::Example<>(torch::zeros(feature_shape),
-                                      torch::zeros(label_shape));
+        return torch::data::Example<>{torch::zeros(feature_shape),
+                                      torch::zeros(label_shape)};
     }
 
    private:

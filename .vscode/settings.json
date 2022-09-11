@@ -26,6 +26,7 @@
         "vector": "cpp",
         "memory": "cpp",
         "*.tcc": "cpp",
-        "istream": "cpp"
+        "istream": "cpp",
+        "sstream": "cpp"
     }
 }

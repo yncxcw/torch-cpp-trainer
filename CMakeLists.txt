@@ -15,6 +15,7 @@ set(
     sources
     src/residual_block.cpp
     src/resnet.cpp
+    src/trainer.cpp
 )
 
 set(

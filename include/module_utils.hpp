@@ -14,5 +14,13 @@ torch::nn::Conv2d convNxN(int64_t in_channels, int64_t out_channels,
             .padding(1)
             .bias(false));
 }
+
+// This unifies the interface of model so
+// std::shared_ptr<torch::nn::ModelImpl> can be passed to the trainer as a
+// generic type.
+class ModelImpl : public torch::nn::Module {
+    virtual torch::Tensor forward(torch::Tensor x) { return x; }
+};
+
 }  // namespace nn
 }  // namespace torch
