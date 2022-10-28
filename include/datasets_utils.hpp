@@ -6,10 +6,13 @@
 #include <stdexcept>
 #include <vector>
 
+#include <ATen/ATen.h>
+#include <torch/torch.h>
+
 namespace torch {
 namespace data {
 
-using TensorShape = std::vector<int64_t>;
+using TensorShape = at::IntArrayRef;
 
 void _check_tensor_shape(const TensorShape& tensor_shape) {
     std::for_each(

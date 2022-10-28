@@ -1,4 +1,5 @@
 // Copyright 2020-present pytorch-cpp Authors
+// Copyright ynjassionchen@gmail.com
 #pragma once
 
 #include <torch/torch.h>
