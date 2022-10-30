@@ -17,7 +17,7 @@ class TaskFactory {
 
     ~TaskFactory() {}
 
-    // It doesn't make sense to build a new factory from other.
+    // It doesn't make sense to build a new factory from another.
     TaskFactory(const TaskFactory& other) = delete;
 
     std::string name() const { return m_name; }
