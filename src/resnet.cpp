@@ -7,8 +7,7 @@ namespace torch {
 namespace nn {
 
 template <typename Block>
-ResNetImpl<Block>::ResNetImpl(const std::array<int64_t, 3>& layers,
-                              int64_t num_classes)
+ResNetImpl<Block>::ResNetImpl(const std::array<int64_t, 3>& layers, int64_t num_classes)
     : layer1(make_layer(16, layers[0])),
       layer2(make_layer(32, layers[1], 2)),
       layer3(make_layer(64, layers[2], 2)),
@@ -38,16 +37,14 @@ torch::Tensor ResNetImpl<Block>::forward(torch::Tensor x) {
 }
 
 template <typename Block>
-torch::nn::Sequential ResNetImpl<Block>::make_layer(int64_t out_channels,
-                                                    int64_t blocks,
+torch::nn::Sequential ResNetImpl<Block>::make_layer(int64_t out_channels, int64_t blocks,
                                                     int64_t stride) {
     torch::nn::Sequential layers;
     torch::nn::Sequential downsample{nullptr};
 
     if (stride != 1 || in_channels != out_channels) {
-        downsample =
-            torch::nn::Sequential{convNxN<3>(in_channels, out_channels, stride),
-                                  torch::nn::BatchNorm2d(out_channels)};
+        downsample = torch::nn::Sequential{convNxN<3>(in_channels, out_channels, stride),
+                                           torch::nn::BatchNorm2d(out_channels)};
     }
 
     layers->push_back(Block(in_channels, out_channels, stride, downsample));

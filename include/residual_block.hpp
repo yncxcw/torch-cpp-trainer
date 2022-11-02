@@ -11,8 +11,7 @@ namespace nn {
 
 class ResidualBlockImpl : public torch::nn::ModelImpl {
    public:
-    ResidualBlockImpl(int64_t in_channels, int64_t out_channels,
-                      int64_t stride = 1,
+    ResidualBlockImpl(int64_t in_channels, int64_t out_channels, int64_t stride = 1,
                       torch::nn::Sequential downsample = nullptr);
 
     torch::Tensor forward(torch::Tensor x);

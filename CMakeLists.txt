@@ -16,6 +16,7 @@ set(
     src/residual_block.cpp
     src/resnet.cpp
     src/trainer.cpp
+    src/cifar10_dataset.cpp
 )
 
 set(

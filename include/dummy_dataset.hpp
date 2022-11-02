@@ -17,10 +17,9 @@ using namespace torch::data;
 
 class DummyDataset : public torch::data::datasets::Dataset<DummyDataset> {
    public:
-    explicit DummyDataset(
-        const size_t length, const TensorShape feature_shape,
-        const TensorShape label_shape,
-        std::function<torch::Tensor(TensorShape)> tensor_function)
+    explicit DummyDataset(const size_t length, const TensorShape feature_shape,
+                          const TensorShape label_shape,
+                          std::function<torch::Tensor(TensorShape)> tensor_function)
         : length(length),
           feature_shape(feature_shape),
           label_shape(label_shape),
@@ -32,8 +31,7 @@ class DummyDataset : public torch::data::datasets::Dataset<DummyDataset> {
     torch::optional<size_t> size() const override { return length; }
 
     torch::data::Example<> get(size_t index) override {
-        return torch::data::Example<>{tensor_function(feature_shape),
-                                      tensor_function(label_shape)};
+        return torch::data::Example<>{tensor_function(feature_shape), tensor_function(label_shape)};
     }
 
    private:

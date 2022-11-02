@@ -7,8 +7,7 @@ namespace torch {
 template <typename Dataset, typename Sampler>
 Trainer<Dataset, Sampler>::Trainer(
     torch::Device device, torch::nn::AnyModule model,
-    std::unique_ptr<torch::data::StatelessDataLoader<Dataset, Sampler>>
-        ptr_dataloader,
+    std::unique_ptr<torch::data::StatelessDataLoader<Dataset, Sampler>> ptr_dataloader,
     std::unique_ptr<torch::optim::Optimizer> ptr_optimizer,
     std::function<torch::Tensor(torch::Tensor, torch::Tensor)> loss_function)
     : device(device),
@@ -20,8 +19,7 @@ Trainer<Dataset, Sampler>::Trainer(
 template <typename Dataset, typename Sampler>
 void Trainer<Dataset, Sampler>::train(size_t epochs) {
     std::cout << std::fixed << std::setprecision(4);
-    std::cout << "Start training for " << epochs << " epochs on device "
-              << device.str();
+    std::cout << "Start training for " << epochs << " epochs on device " << device.str();
 
     // Get the underlying ptr pointig to the torch::nn::Module
     std::shared_ptr<torch::nn::Module> ptr_model = model.ptr();

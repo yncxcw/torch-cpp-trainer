@@ -8,8 +8,7 @@
 
 namespace torch {
 namespace nn {
-ResidualBlockImpl::ResidualBlockImpl(int64_t in_channels, int64_t out_channels,
-                                     int64_t stride,
+ResidualBlockImpl::ResidualBlockImpl(int64_t in_channels, int64_t out_channels, int64_t stride,
                                      torch::nn::Sequential downsample)
     : conv1(convNxN<3>(in_channels, out_channels, stride)),
       bn1(out_channels),

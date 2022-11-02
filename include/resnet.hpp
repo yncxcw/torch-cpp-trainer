@@ -14,8 +14,7 @@ namespace nn {
 template <typename Block>
 class ResNetImpl : public torch::nn::Module {
    public:
-    explicit ResNetImpl(const std::array<int64_t, 3>& layers,
-                        int64_t num_classes = 10);
+    explicit ResNetImpl(const std::array<int64_t, 3>& layers, int64_t num_classes = 10);
     torch::Tensor forward(torch::Tensor x);
 
    private:
@@ -29,8 +28,7 @@ class ResNetImpl : public torch::nn::Module {
     torch::nn::AvgPool2d avg_pool{8};
     torch::nn::Linear fc;
 
-    torch::nn::Sequential make_layer(int64_t out_channels, int64_t blocks,
-                                     int64_t stride = 1);
+    torch::nn::Sequential make_layer(int64_t out_channels, int64_t blocks, int64_t stride = 1);
 };
 
 // TORCH_MODULE(RestNet) won't work becaulse ResNetImpl needs a template

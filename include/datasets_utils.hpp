@@ -15,12 +15,11 @@ namespace data {
 using TensorShape = at::IntArrayRef;
 
 void _check_tensor_shape(const TensorShape& tensor_shape) {
-    std::for_each(
-        tensor_shape.begin(), tensor_shape.end(), [](const int64_t& dim) {
-            if (dim < 0) {
-                throw std::runtime_error("Dim of tensor_shaoe must >=0");
-            }
-        });
+    std::for_each(tensor_shape.begin(), tensor_shape.end(), [](const int64_t& dim) {
+        if (dim < 0) {
+            throw std::runtime_error("Dim of tensor_shaoe must >=0");
+        }
+    });
 }
 }  // namespace data
 }  // namespace torch

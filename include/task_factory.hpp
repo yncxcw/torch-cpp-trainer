@@ -1,10 +1,17 @@
 // Copyright ynjassionchen@gmail.com
 #pragma once
+#include <functional>
+#include <memory>
 #include <string>
+
+#include <torch/data/datasets/base.h>
+#include <torch/data/example.h>
+#include <torch/torch.h>
 
 namespace torch {
 namespace train {
 
+template <typename Dataset, typename Sampler>
 class TaskFactory {
    public:
     explicit TaskFactory(const std::string& name, const size_t batch_size,
@@ -27,6 +34,22 @@ class TaskFactory {
     size_t batch_size() const { return m_batch_size; }
 
     size_t num_workers() const { return m_num_workers; }
+
+    // interface
+    virtual torch::nn::AnyModule make_model() = 0;
+
+    std::unique_ptr<torch::data::StatelessDataLoader<Dataset, Sampler>>
+    make_dataloader() {
+        return torch::data::make_data_loader<Dataset, Sampler>(make_dataset(),
+                                                               m_batch_size);
+    };
+
+    virtual Dataset make_dataset();
+
+    virtual std::unique_ptr<torch::optim::Optimizer> make_optimizer() = 0;
+
+    virtual std::function<torch::Tensor(torch::Tensor, torch::Tensor)>
+    make_loss_function() = 0;
 
    private:
     std::string m_name;
