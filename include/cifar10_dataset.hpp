@@ -10,6 +10,13 @@
 namespace torch {
 namespace data {
 namespace datasets {
+
+const constexpr int64_t kImageHeight = 32;
+const constexpr int64_t kImageWidth = 32;
+const constexpr int64_t kSampleSize = 3 * kImageHeight * kImageWidth + 1;
+
+std::pair<torch::Tensor, torch::Tensor> load_cifar_bins(const std::string& root);
+
 class Cifar10Dataset : public torch::data::datasets::Dataset<Cifar10Dataset> {
    public:
     explicit Cifar10Dataset(const std::string& root);
