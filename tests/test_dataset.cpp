@@ -36,7 +36,7 @@ class Cifar10DatasetTest : public ::testing::Test {
         std::ofstream fout(dataset, std::ios::binary | std::ios::app);
         for (size_t i = 0; i < num; i++) {
             auto buffer = std::make_unique<char[]>(torch::data::datasets::kSampleSize);
-            std::memset(buffer.get(), '0', torch::data::datasets::kSampleSize * sizeof(char));
+            std::memset(buffer.get(), 0, torch::data::datasets::kSampleSize * sizeof(char));
             fout.write(buffer.get(), torch::data::datasets::kSampleSize);
         }
 
@@ -73,10 +73,19 @@ TEST_F(Cifar10DatasetTest, TestEndWith) {
 TEST_F(Cifar10DatasetTest, TestLoadCifarBin) {
     auto test_folder = get_tmp_folder();
     auto [images, targets] = torch::data::datasets::load_cifar_bins(test_folder);
-    auto expected_image_shape =
-        std::vector<int64_t>{get_num_samples(), 3, torch::data::datasets::kImageHeight,
-                             torch::data::datasets::kImageWidth};
+    std::vector<int64_t> expected_image_shape{get_num_samples(), 3,
+                                              torch::data::datasets::kImageHeight,
+                                              torch::data::datasets::kImageWidth};
     EXPECT_EQ(images.sizes(), expected_image_shape);
+    // The test bin file is all 0
+    EXPECT_EQ(images.equal(torch::zeros(expected_image_shape,
+                                        torch::TensorOptions().dtype(torch::kFloat32))),
+              true);
+    EXPECT_EQ(images.dtype(), torch::kFloat32);
+
+    std::vector<int64_t> expected_target_shape{get_num_samples()};
+    EXPECT_EQ(targets.sizes(), expected_target_shape);
+    EXPECT_EQ(targets.dtype(), torch::kInt64);
 }
 
 int main(int argc, char** argv) {

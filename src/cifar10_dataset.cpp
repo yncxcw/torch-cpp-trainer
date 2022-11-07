@@ -36,6 +36,7 @@ std::pair<torch::Tensor, torch::Tensor> load_cifar_bins(const std::string& root)
 
     // Load the char array into tensor.
     size_t num_samples = buffer.size() / kSampleSize;
+    // Note, torch::empty returns uninitialized data (like random data).
     auto images = torch::empty({static_cast<int64_t>(num_samples), 3, kImageHeight, kImageWidth},
                                torch::kByte);
     auto targets = torch::empty(num_samples, torch::kByte);
