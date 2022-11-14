@@ -1,5 +1,5 @@
 // Copyright ynjassionchen@gmail.com
-#include "../include/module_utils.hpp"
+#include "module_utils.hpp"
 
 #include <gtest/gtest.h>
 #include <vector>

@@ -1,3 +1,4 @@
+# Copyright ynjassionchen@gmail.com
 cmake_minimum_required(VERSION 3.14 FATAL_ERROR)
 
 project(${CMAKE_PROJECT_NAME}Tests VERSION 1.0.0 LANGUAGES CXX)

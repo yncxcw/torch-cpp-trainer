@@ -1,7 +1,7 @@
 // Copyright ynjassionchen@gmail.com
-#include "../include/cifar10_dataset.hpp"
-#include "../include/datasets_utils.hpp"
-#include "../include/dummy_dataset.hpp"
+#include "cifar10_dataset.hpp"
+#include "datasets_utils.hpp"
+#include "dummy_dataset.hpp"
 
 #include <gtest/gtest.h>
 #include <filesystem>

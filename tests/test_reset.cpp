@@ -1,6 +1,6 @@
 // Copyright ynjassionchen@gmail.com
-#include "../include/residual_block.hpp"
-#include "../include/resnet.hpp"
+#include "residual_block.hpp"
+#include "resnet.hpp"
 
 #include <gtest/gtest.h>
 #include <memory>
