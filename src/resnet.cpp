@@ -58,5 +58,8 @@ torch::nn::Sequential ResNetImpl<Block>::make_layer(int64_t out_channels, int64_
     return layers;
 }
 
+// Instantiate the template class since we split the template into .hpp and .cpp
+template class ResNetImpl<torch::nn::ResidualBlock>;
+
 }  // namespace nn
 }  // namespace torch

@@ -1,5 +1,50 @@
 // Copyright ynjassionchen@gmail.com
 #pragma once
 
+#include <iostream>
+#include <memory>
+#include <string>
+
 #include "cifar10_dataset.hpp"
 #include "resnet.hpp"
+#include "task_factory.hpp"
+
+using TaskFactory = torch::train::TaskFactory<torch::data::datasets::Cifar10Dataset,
+                                              torch::data::samplers::RandomSampler>;
+
+using ResNet = torch::nn::ResNet<torch::nn::ResidualBlock>;
+
+class Cifar10Factory : public TaskFactory {
+    Cifar10Factory(const std::string& name, const size_t batch_size, const std::string& results_dir,
+                   const size_t num_workers, const std::string dataset_folder,
+                   const double learning_rate)
+        : TaskFactory(name, batch_size, num_workers, results_dir, learning_rate),
+          m_dataset_folder(dataset_folder) {}
+
+    torch::data::datasets::Cifar10Dataset make_dataset() override {
+        return torch::data::datasets::Cifar10Dataset(m_dataset_folder);
+    }
+
+    torch::nn::AnyModule make_model() {
+        std::array<int64_t, 3> layers{2, 2, 2};
+        return torch::nn::AnyModule(ResNet(layers, m_num_classes));
+    }
+
+    // std::unique_ptr<torch::optim::Optimizer> make_optimizer(torch::nn::AnyModule model) override
+    // {
+    //     return std::make_unique<torch::optim::Adam>(model<ResNet>.get()->parameters(),
+    //                                                 torch::optim::AdamOptions(learning_rate()));
+    // }
+
+    std::function<torch::Tensor(torch::Tensor, torch::Tensor)> make_loss_function() override {
+        auto loss_function = [](torch::Tensor input, torch::Tensor target) -> torch::Tensor {
+            return torch::nn::functional::cross_entropy(input, target);
+        };
+
+        return loss_function;
+    }
+
+   private:
+    std::string m_dataset_folder;
+    int64_t m_num_classes{10};
+};
