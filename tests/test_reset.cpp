@@ -23,6 +23,7 @@ TEST(TestResnet, TestForward) {
     };
 
     auto model = model_maker();
+    std::vector<torch::Tensor> model_weights(model.ptr()->parameters());
     auto output_tensor = model.forward(torch::ones({10, 3, 32, 32}));
     auto tensor_shape = output_tensor.sizes();
     auto expected_shape = std::vector<int64_t>{10, 10};

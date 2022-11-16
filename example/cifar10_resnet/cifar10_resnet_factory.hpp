@@ -12,7 +12,7 @@
 using TaskFactory = torch::train::TaskFactory<torch::data::datasets::Cifar10Dataset,
                                               torch::data::samplers::RandomSampler>;
 
-using ResNet = torch::nn::ResNet<torch::nn::ResidualBlock>;
+using ResNet = torch::nn::ResNet<>;
 
 class Cifar10Factory : public TaskFactory {
     Cifar10Factory(const std::string& name, const size_t batch_size, const std::string& results_dir,
@@ -30,11 +30,11 @@ class Cifar10Factory : public TaskFactory {
         return torch::nn::AnyModule(ResNet(layers, m_num_classes));
     }
 
-    // std::unique_ptr<torch::optim::Optimizer> make_optimizer(torch::nn::AnyModule model) override
-    // {
-    //     return std::make_unique<torch::optim::Adam>(model<ResNet>.get()->parameters(),
-    //                                                 torch::optim::AdamOptions(learning_rate()));
-    // }
+    std::unique_ptr<torch::optim::Optimizer> make_optimizer(torch::nn::AnyModule model) override {
+        // The ptr() returns a shared_ptr of torch::nn::Module, but why ?
+        return std::make_unique<torch::optim::Adam>(model.ptr()->parameters(),
+                                                    torch::optim::AdamOptions(learning_rate()));
+    }
 
     std::function<torch::Tensor(torch::Tensor, torch::Tensor)> make_loss_function() override {
         auto loss_function = [](torch::Tensor input, torch::Tensor target) -> torch::Tensor {
