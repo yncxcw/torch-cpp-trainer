@@ -46,12 +46,12 @@ class Cifar10Factory : public TaskFactory {
     }
 
     std::function<ExampleType(std::vector<ExampleType>)> make_collate_function() override {
-        auto collate_function = [](std::vector<ExampleType> batch) -> ExampleType {
+        auto collate_function = [](const std::vector<ExampleType>& batch) -> ExampleType {
             std::vector<torch::Tensor> datas;
             std::vector<torch::Tensor> targets;
             for (const auto& sample : batch) {
-                datas.push_back(sample.data);
-                targets.push_back(sample.target);
+                datas.push_back(std::move(sample.data));
+                targets.push_back(std::move(sample.target));
             }
             return ExampleType{torch::stack(std::move(datas)), torch::stack(std::move(targets))};
         };

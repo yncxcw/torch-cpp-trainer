@@ -16,11 +16,14 @@ namespace torch {
 template <typename Dataset, typename Sampler = torch::data::samplers::RandomSampler>
 class Trainer {
    public:
+    using ExampleType = typename Dataset::ExampleType;
+
     explicit Trainer(
         torch::Device device, torch::nn::AnyModule model,
         std::unique_ptr<torch::data::StatelessDataLoader<Dataset, Sampler>> ptr_dataloader,
         std::unique_ptr<torch::optim::Optimizer> ptr_optimizer,
-        std::function<torch::Tensor(torch::Tensor, torch::Tensor)> loss_function);
+        std::function<torch::Tensor(torch::Tensor, torch::Tensor)> loss_function,
+        std::function<ExampleType(std::vector<ExampleType>)> collate_function);
 
     // Trainer is statefull, so delee copy constructor and assignment operator.
     Trainer(const Trainer&) = delete;
@@ -39,6 +42,8 @@ class Trainer {
     std::unique_ptr<torch::optim::Optimizer> ptr_optimizer;
     // loss function
     std::function<torch::Tensor(torch::Tensor, torch::Tensor)> loss_function;
+    // function to collate a vector of batches.
+    std::function<ExampleType(std::vector<ExampleType>)> collate_function;
 };
 
 }  // namespace torch

@@ -11,12 +11,14 @@ Trainer<Dataset, Sampler>::Trainer(
     torch::Device device, torch::nn::AnyModule model,
     std::unique_ptr<torch::data::StatelessDataLoader<Dataset, Sampler>> ptr_dataloader,
     std::unique_ptr<torch::optim::Optimizer> ptr_optimizer,
-    std::function<torch::Tensor(torch::Tensor, torch::Tensor)> loss_function)
+    std::function<torch::Tensor(torch::Tensor, torch::Tensor)> loss_function,
+    std::function<ExampleType(std::vector<ExampleType>)> collate_function)
     : device(device),
       model(model),
       ptr_dataloader(std::move(ptr_dataloader)),
       ptr_optimizer(std::move(ptr_optimizer)),
-      loss_function(loss_function) {}
+      loss_function(loss_function),
+      collate_function(collate_function) {}
 
 template <typename Dataset, typename Sampler>
 void Trainer<Dataset, Sampler>::train(size_t epochs) {
@@ -33,8 +35,9 @@ void Trainer<Dataset, Sampler>::train(size_t epochs) {
         size_t step = 0;
 
         for (auto& batch : *ptr_dataloader) {
-            auto data = batch.data.to(device);
-            auto target = batch.target.to(device);
+            auto collated_batch = collate_function(batch);
+            auto data = collated_batch.data.to(device);
+            auto target = collated_batch.target.to(device);
 
             // Forward pass
             auto output = model.forward(data);
@@ -57,7 +60,7 @@ void Trainer<Dataset, Sampler>::train(size_t epochs) {
 }
 
 // This is a bit annoying, should we only keep trainer.hpp.
-// template class Trainer<torch::data::datasets::Cifar10Dataset,
-// torch::data::samplers::RandomSampler>; template class
-// Trainer<torch::data::datasets::DummyDataset, torch::data::samplers::RandomSampler>;
+template class Trainer<torch::data::datasets::Cifar10Dataset, torch::data::samplers::RandomSampler>;
+// template class Trainer<torch::data::datasets::DummyDataset,
+// torch::data::samplers::RandomSampler>;
 }  // namespace torch
