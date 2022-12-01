@@ -15,6 +15,7 @@ using TaskFactory = torch::train::TaskFactory<torch::data::datasets::Cifar10Data
 using ResNet = torch::nn::ResNet<>;
 
 class Cifar10Factory : public TaskFactory {
+   public:
     Cifar10Factory(const std::string& name, const size_t batch_size, const std::string& results_dir,
                    const size_t num_workers, const std::string dataset_folder,
                    const double learning_rate)
@@ -42,6 +43,19 @@ class Cifar10Factory : public TaskFactory {
         };
 
         return loss_function;
+    }
+
+    std::function<ExampleType(std::vector<ExampleType>)> make_collate_function() override {
+        auto collate_function = [](std::vector<ExampleType> batch) -> ExampleType {
+            std::vector<torch::Tensor> datas;
+            std::vector<torch::Tensor> targets;
+            for (const auto& sample : batch) {
+                datas.push_back(sample.data);
+                targets.push_back(sample.target);
+            }
+            return ExampleType{torch::stack(std::move(datas)), torch::stack(std::move(targets))};
+        };
+        return collate_function;
     }
 
    private:

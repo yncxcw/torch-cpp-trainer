@@ -58,7 +58,7 @@ Cifar10Dataset::Cifar10Dataset(const std::string& root) {
     targets_ = std::move(end);
 }
 
-torch::data::Example<> Cifar10Dataset::get(size_t index) {
+torch::data::Example<> Cifar10Dataset::get(const size_t index) {
     return torch::data::Example<>{images_[index], targets_[index]};
 }
 

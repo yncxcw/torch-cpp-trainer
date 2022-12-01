@@ -1,13 +1,13 @@
 // Copyright ynjassionchen@gmail.com
 #pragma once
 
-#include "datasets_utils.hpp"
+#include <vector>
 
 #include <torch/data/datasets/base.h>
 #include <torch/data/example.h>
 #include <torch/types.h>
 
-#include <vector>
+#include "datasets_utils.hpp"
 
 namespace torch {
 namespace data {
@@ -24,8 +24,8 @@ class DummyDataset : public torch::data::datasets::Dataset<DummyDataset> {
           feature_shape(feature_shape),
           label_shape(label_shape),
           tensor_function(tensor_function) {
-        _check_tensor_shape(feature_shape);
-        _check_tensor_shape(label_shape);
+        check_tensor_shape(feature_shape);
+        check_tensor_shape(label_shape);
     }
 
     torch::optional<size_t> size() const override { return length; }

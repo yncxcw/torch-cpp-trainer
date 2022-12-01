@@ -1,6 +1,8 @@
 // Copyright ynjassionchen@gmail.com
 
 #include "trainer.hpp"
+#include "dummy_dataset.hpp"
+#include "module_utils.hpp"
 
 namespace torch {
 
@@ -54,4 +56,8 @@ void Trainer<Dataset, Sampler>::train(size_t epochs) {
     }
 }
 
+// This is a bit annoying, should we only keep trainer.hpp.
+// template class Trainer<torch::data::datasets::Cifar10Dataset,
+// torch::data::samplers::RandomSampler>; template class
+// Trainer<torch::data::datasets::DummyDataset, torch::data::samplers::RandomSampler>;
 }  // namespace torch

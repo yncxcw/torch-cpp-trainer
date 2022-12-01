@@ -60,6 +60,7 @@ TEST(TestDummyDataset, TestLoad) {
         batch_count++;
     }
     EXPECT_EQ(batch_count, (100 + 7) / 8);
+    EXPECT_EQ(1, 0);
 }
 
 TEST_F(Cifar10DatasetTest, TestEndWith) {

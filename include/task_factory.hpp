@@ -14,6 +14,8 @@ namespace train {
 template <typename Dataset, typename Sampler>
 class TaskFactory {
    public:
+    using ExampleType = typename Dataset::ExampleType;
+
     explicit TaskFactory(const std::string& name, const size_t batch_size, const size_t num_workers,
                          const std::string& results_dir, const double learning_rate)
         : m_name(name),
@@ -44,7 +46,9 @@ class TaskFactory {
         return torch::data::make_data_loader<Dataset, Sampler>(make_dataset(), m_batch_size);
     };
 
-    virtual Dataset make_dataset();
+    virtual Dataset make_dataset() = 0;
+
+    virtual std::function<ExampleType(std::vector<ExampleType>)> make_collate_function() = 0;
 
     virtual std::unique_ptr<torch::optim::Optimizer> make_optimizer(torch::nn::AnyModule model) = 0;
 

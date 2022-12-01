@@ -14,7 +14,7 @@ namespace data {
 
 using TensorShape = at::IntArrayRef;
 
-void _check_tensor_shape(const TensorShape& tensor_shape) {
+inline void check_tensor_shape(const TensorShape& tensor_shape) {
     std::for_each(tensor_shape.begin(), tensor_shape.end(), [](const int64_t& dim) {
         if (dim < 0) {
             throw std::runtime_error("Dim of tensor_shaoe must >=0");
@@ -22,7 +22,7 @@ void _check_tensor_shape(const TensorShape& tensor_shape) {
     });
 }
 
-bool ends_with(const std::string& str, const std::string& suffix) {
+inline bool ends_with(const std::string& str, const std::string& suffix) {
     return str.size() >= suffix.size() &&
            0 == str.compare(str.size() - suffix.size(), suffix.size(), suffix);
 }
