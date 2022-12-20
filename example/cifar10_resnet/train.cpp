@@ -9,5 +9,23 @@ using Trainer =
 
 int main() {
     auto factory_ptr = std::make_unique<Cifar10Factory>("cifar10", 10, "/tmp", 5, "/tmp", 0.1);
+    auto model = factory_ptr->make_model();
+
+    Trainer trainer(
+        /* device           */
+        torch::kCUDA,
+        /* model            */
+        factory_ptr->make_model(),
+        /* dataloader       */
+        std::move(factory_ptr->make_dataloader()),
+        /* optimizer        */
+        std::move(factory_ptr->make_optimizer(model)),
+        /* loss_function    */
+        factory_ptr->make_loss_function(),
+        /* collate_function */
+        factory_ptr->make_collate_function());
+
+    trainer.train(10);
+
     return 0;
 }

@@ -43,8 +43,14 @@ class TaskFactory {
     virtual torch::nn::AnyModule make_model() = 0;
 
     std::unique_ptr<torch::data::StatelessDataLoader<Dataset, Sampler>> make_dataloader() {
-        return torch::data::make_data_loader<Dataset, Sampler>(make_dataset(), m_batch_size);
+        auto dataset = make_dataset();
+        auto dataset_size = dataset.size();
+        TORCH_CHECK(dataset_size.has_value(), "dataset must contains samples")
+        auto sampler = make_sampler(*dataset_size);
+        return torch::data::make_data_loader<Dataset, Sampler>(dataset, sampler, m_batch_size);
     };
+
+    Sampler make_sampler(size_t size) { return Sampler(size); }
 
     virtual Dataset make_dataset() = 0;
 
@@ -60,7 +66,7 @@ class TaskFactory {
     size_t m_batch_size;
     size_t m_num_workers;
     double m_learning_rate;
-};
+};  // namespace train
 }  // namespace train
 
 }  // namespace torch

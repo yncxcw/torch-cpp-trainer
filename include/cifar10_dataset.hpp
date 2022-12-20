@@ -25,6 +25,8 @@ class Cifar10Dataset : public torch::data::datasets::Dataset<Cifar10Dataset> {
 
     torch::optional<size_t> size() const override;
 
+    static const constexpr bool is_stateful = false;
+
    private:
     torch::Tensor images_;
     torch::Tensor targets_;
