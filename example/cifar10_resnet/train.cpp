@@ -8,7 +8,7 @@ using Trainer =
     torch::Trainer<torch::data::datasets::Cifar10Dataset, torch::data::samplers::RandomSampler>;
 
 int main() {
-    auto factory_ptr = std::make_unique<Cifar10Factory>("cifar10", 10, "/tmp", 5, "/tmp", 0.1);
+    auto factory_ptr = std::make_unique<Cifar10Factory>("cifar10", 10, "/tmp/cifar10/log", 5, "/tmp/cifar10/cifar-10-batches-bin/train", 0.1);
     auto model = factory_ptr->make_model();
 
     Trainer trainer(

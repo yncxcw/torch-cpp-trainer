@@ -6,9 +6,9 @@
                 "${workspaceFolder}/**"
             ],
             "defines": [],
-            "compilerPath": "/usr/bin/gcc",
+            "compilerPath": "/usr/bin/gcc-9",
             "cStandard": "gnu11",
-            "cppStandard": "gnu++14",
+            "cppStandard": "gnu++17",
             "intelliSenseMode": "linux-gcc-x64",
             "configurationProvider": "ms-vscode.cmake-tools"
         }
