@@ -51,7 +51,7 @@ void Trainer<Dataset, Sampler>::train(size_t epochs) {
             // Update weights
             ptr_optimizer->step();
 
-            std::cout << "Step " << step << " loss " << loss << std::endl;
+            std::cout << "Step " << step << " loss " << loss.item<float>() << std::endl;
             step++;
         }
         // TODO Add callbacks.

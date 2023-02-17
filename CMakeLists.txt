@@ -1,11 +1,13 @@
 # Copyright ynjassionchen@gmail.com
 cmake_minimum_required(VERSION 3.14 FATAL_ERROR)
 
+set(CMAKE_C_COMPILER "/usr/bin/x86_64-linux-gnu-gcc-9")
+set(CMAKE_CXX_COMPILER "/usr/bin/x86_64-linux-gnu-g++-9")
+
 project(torch_cpp_trainer VERSION 1.0.0 LANGUAGES CXX)
 
 set(PRO_LIB_NAME ${PROJECT_NAME}_lib)
 
-# Find torch on you system
 # set(CMAKE_PREFIX_PATH "/home/wei/.local/lib/python3.8/site-packages/torch/share/cmake")
 set(CMAKE_PREFIX_PATH "/usr/local/libtorch/share/cmake")
 find_package(Torch REQUIRED)
