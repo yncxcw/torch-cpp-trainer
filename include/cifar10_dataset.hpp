@@ -6,6 +6,7 @@
 #include <torch/torch.h>
 #include <torch/types.h>
 #include <string>
+#include <vector>
 
 namespace torch {
 namespace data {
@@ -19,6 +20,9 @@ std::pair<torch::Tensor, torch::Tensor> load_cifar_bins(const std::string& root)
 
 class Cifar10Dataset : public torch::data::datasets::Dataset<Cifar10Dataset> {
    public:
+    using ExampleType = typename Dataset::ExampleType;
+    using BatchType = typename std::vector<Dataset::ExampleType>;
+
     explicit Cifar10Dataset(const std::string& root);
 
     torch::data::Example<> get(size_t index) override;

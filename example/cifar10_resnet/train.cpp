@@ -4,8 +4,7 @@
 #include <iostream>
 #include <memory>
 
-using Trainer =
-    torch::Trainer<torch::data::datasets::Cifar10Dataset, torch::data::samplers::RandomSampler>;
+using Trainer = torch::Trainer<Cifar10Factory>;
 
 int main() {
     auto factory_ptr = std::make_unique<Cifar10Factory>(
@@ -26,7 +25,7 @@ int main() {
         /* collate_function */
         factory_ptr->make_collate_function());
 
-    trainer.train(10);
+    trainer.train(1);
 
     return 0;
 }

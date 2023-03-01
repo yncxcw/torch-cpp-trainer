@@ -9,28 +9,73 @@
 #include <torch/torch.h>
 #include <torch/types.h>
 
-#include "cifar10_dataset.hpp"
+#include "module_utils.hpp"
 
 namespace torch {
 
-template <typename Dataset, typename Sampler = torch::data::samplers::RandomSampler>
+template <typename TaskFactory>
 class Trainer {
    public:
-    using ExampleType = typename Dataset::ExampleType;
+    using Dataset = typename TaskFactory::TaskDataset;
+    using Sampler = typename TaskFactory::TaskSampler;
+    using ExampleType = typename TaskFactory::ExampleType;
+    using BatchType = typename TaskFactory::BatchType;
 
     explicit Trainer(
         torch::Device device, torch::nn::AnyModule model,
         std::unique_ptr<torch::data::StatelessDataLoader<Dataset, Sampler>> ptr_dataloader,
         std::unique_ptr<torch::optim::Optimizer> ptr_optimizer,
         std::function<torch::Tensor(torch::Tensor, torch::Tensor)> loss_function,
-        std::function<ExampleType(std::vector<ExampleType>)> collate_function);
+        std::function<ExampleType(std::vector<ExampleType>)> collate_function)
+        : device(device),
+          model(model),
+          ptr_dataloader(std::move(ptr_dataloader)),
+          ptr_optimizer(std::move(ptr_optimizer)),
+          loss_function(loss_function),
+          collate_function(collate_function) {}
 
     // Trainer is statefull, so delee copy constructor and assignment operator.
     Trainer(const Trainer&) = delete;
 
     Trainer& operator=(const Trainer&) = delete;
 
-    void train(size_t epochs);
+    void train(size_t epochs) {
+        std::cout << std::fixed << std::setprecision(4);
+        std::cout << "Start training for " << epochs << " epochs on device " << device.str();
+
+        // Get the underlying ptr pointig to the torch::nn::Module
+        std::shared_ptr<torch::nn::Module> ptr_model = model.ptr();
+        ptr_model->train();
+        ptr_model->to(device, /*non_blocking*/ true);
+
+        for (size_t epoch = 0; epoch < epochs; epoch++) {
+            double running_loss = 0.0;
+            size_t step = 0;
+
+            for (auto& batch : *ptr_dataloader) {
+                auto collated_batch = collate_function(batch);
+                auto data = collated_batch.data.to(device);
+                auto target = collated_batch.target.to(device);
+
+                // Forward pass
+                auto output = model.forward(data);
+
+                // Compute loss
+                torch::Tensor loss = loss_function(output, target);
+
+                ptr_optimizer->zero_grad();
+                // Backward pass
+                loss.backward();
+                // Update weights
+                ptr_optimizer->step();
+
+                std::cout << "Step " << step << " loss " << loss.item() << std::endl;
+                step++;
+            }
+            // TODO Add callbacks.
+            std::cout << "Epoch " << epoch << " finished." << std::endl;
+        }
+    }
 
    private:
     torch::Device device;

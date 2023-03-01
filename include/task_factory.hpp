@@ -15,6 +15,9 @@ template <typename Dataset, typename Sampler>
 class TaskFactory {
    public:
     using ExampleType = typename Dataset::ExampleType;
+    using BatchType = typename Dataset::BatchType;
+    using TaskDataset = Dataset;
+    using TaskSampler = Sampler;
 
     explicit TaskFactory(const std::string& name, const size_t batch_size, const size_t num_workers,
                          const std::string& results_dir, const double learning_rate)

@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 3.14 FATAL_ERROR)
 
 set(CMAKE_C_COMPILER "/usr/bin/x86_64-linux-gnu-gcc-9")
 set(CMAKE_CXX_COMPILER "/usr/bin/x86_64-linux-gnu-g++-9")
+set(CMAKE_CUDA_ARCHITECTURES, "6.1")
 
 project(torch_cpp_trainer VERSION 1.0.0 LANGUAGES CXX)
 
@@ -17,7 +18,6 @@ set(
     sources
     src/residual_block.cpp
     src/resnet.cpp
-    src/trainer.cpp
     src/cifar10_dataset.cpp
 )
 
