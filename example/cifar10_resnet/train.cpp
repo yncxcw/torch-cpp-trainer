@@ -25,7 +25,7 @@ int main() {
         /* collate_function */
         factory_ptr->make_collate_function());
 
-    trainer.train(1);
+    trainer.train(10);
 
     return 0;
 }

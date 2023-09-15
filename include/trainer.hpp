@@ -51,7 +51,7 @@ class Trainer {
 
     Trainer& operator=(const Trainer&) = delete;
 
-    void train(size_t epochs) {
+    void train(const size_t epochs) {
         std::cout << std::fixed << std::setprecision(4);
         std::cout << "Start training for " << epochs << " epochs on device " << device.str();
 
