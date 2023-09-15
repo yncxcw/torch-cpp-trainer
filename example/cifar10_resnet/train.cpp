@@ -25,6 +25,8 @@ int main() {
         /* collate_function */
         factory_ptr->make_collate_function());
 
+    torch::save(model.ptr(), "/tmp/model.pt");
+
     trainer.train(10);
 
     return 0;

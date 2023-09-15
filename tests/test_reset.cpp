@@ -30,6 +30,15 @@ TEST(TestResnet, TestForward) {
     EXPECT_EQ(tensor_shape, expected_shape);
 }
 
+TEST(TestResnet, TestCheckPoint) {
+    auto model_to_save = torch::nn::AnyModule(ResNet(std::array<int64_t, 3>({2,2,2}), 10));
+    torch::save(model_to_save.ptr(), "/tmp/model.pt");
+
+    auto model_to_load = torch::nn::AnyModule(ResNet(std::array<int64_t, 3>({2,2,2}), 10));
+    std::shared_ptr<torch::nn::Module> ptr_model = model_to_load.ptr(); 
+    torch::load(ptr_model, std::string{"/tmp/model.pt"});
+}
+
 int main(int argc, char **argv) {
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
