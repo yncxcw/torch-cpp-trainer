@@ -4,6 +4,7 @@
 
 #include <gtest/gtest.h>
 #include <array>
+#include <map>
 #include <memory>
 #include <vector>
 
@@ -32,11 +33,19 @@ TEST(TestResnet, TestForward) {
 
 TEST(TestResnet, TestCheckPoint) {
     auto model_to_save = torch::nn::AnyModule(ResNet(std::array<int64_t, 3>({2,2,2}), 10));
-    torch::save(model_to_save.ptr(), "/tmp/model.pt");
+    std::shared_ptr<torch::nn::Module> ptr_model_save = model_to_save.ptr(); 
+    torch::save(ptr_model_save, "/tmp/model.pt");
 
+    auto named_parameter_save = ptr_model_save->named_parameters(); 
     auto model_to_load = torch::nn::AnyModule(ResNet(std::array<int64_t, 3>({2,2,2}), 10));
-    std::shared_ptr<torch::nn::Module> ptr_model = model_to_load.ptr(); 
-    torch::load(ptr_model, std::string{"/tmp/model.pt"});
+    std::shared_ptr<torch::nn::Module> ptr_model_load= model_to_load.ptr(); 
+    torch::load(ptr_model_load, std::string{"/tmp/model.pt"});
+
+    auto named_parameter_load = ptr_model_load->named_parameters();
+    for(auto iter=named_parameter_load.begin(); iter != named_parameter_load.end(); iter++) {
+        EXPECT_TRUE(named_parameter_save.find(iter->key()) != nullptr);
+        EXPECT_TRUE(torch::equal(named_parameter_save[iter->key()], iter->value()));
+    }
 }
 
 int main(int argc, char **argv) {
