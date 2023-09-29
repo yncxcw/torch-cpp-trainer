@@ -19,9 +19,9 @@ template <typename TaskFactory>
 class Trainer {
    public:
     using Dataset = typename TaskFactory::TaskDataset;
-    using Sampler = typename TaskFactory::TaskSampler;
-    using ExampleType = typename TaskFactory::ExampleType;
+    using Sampler = typename TaskFactory::TaskSampler; 
     using BatchType = typename TaskFactory::BatchType;
+    using ExampleType = typename TaskFactory::ExampleType;
 
     explicit Trainer(
         torch::Device device, torch::nn::AnyModule model,
